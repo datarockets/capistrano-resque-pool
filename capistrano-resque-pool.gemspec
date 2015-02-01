@@ -7,7 +7,7 @@ require 'capistrano/resque/pool/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "capistrano-resque-pool"
-  spec.version       = CapistranoResquePool::VERSION
+  spec.version       = Capistrano::Resque::Pool::VERSION
   spec.authors       = ["Maxim Abramchuk", "Dmitry Zhlobo"]
   spec.email         = ["maximabramchuck@gmail.com"]
   spec.summary       = %q{Capistrano integration for Resque pool}
