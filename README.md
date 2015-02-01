@@ -19,16 +19,20 @@ Or install it yourself as:
 ## Usage
 
 Start all the workers and queus.
-`bundle exec cap production resque:pool:start`
+
+		bundle exec cap production resque:pool:start
 
 Gracefully shut down workers and shutdown the manager after all workers are done.
-`bundle exec cap production resque:pool:stop`
+
+		bundle exec cap production resque:pool:stop
 
 Gracefully shut down workers and immediately shutdown manager.
-`bundle exec cap production resque:pool:stop_immediately`
+
+		bundle exec cap production resque:pool:stop_immediately
 
 Reload the config file, reload logfiles, restart all workers.
-`bundle exec cap production resque:pool:restart`
+
+		bundle exec cap production resque:pool:restart
 
 
 ## Contributing
