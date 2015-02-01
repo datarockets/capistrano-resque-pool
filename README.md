@@ -1,6 +1,6 @@
 # Capistrano::Resque::Pool
 
-TODO: Write a gem description
+Capistrano integration for `resque-pool`.
 
 ## Installation
 
@@ -10,7 +10,7 @@ Add this line to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -18,7 +18,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Start all the workers and queus.
+`bundle exec cap production resque:pool:start`
+
+Gracefully shut down workers and shutdown the manager after all workers are done.
+`bundle exec cap production resque:pool:stop`
+
+Gracefully shut down workers and immediately shutdown manager.
+`bundle exec cap production resque:pool:stop_immediately`
+
+Reload the config file, reload logfiles, restart all workers.
+`bundle exec cap production resque:pool:restart`
+
 
 ## Contributing
 

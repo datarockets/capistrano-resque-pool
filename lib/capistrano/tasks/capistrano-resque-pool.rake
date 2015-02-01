@@ -4,7 +4,7 @@ namespace :resque do
     task :start do
       on roles(workers) do
         within app_path do
-          execute :bundle, :exec, 'resque-pool', "--daemon --environment production"
+          execute :bundle, :exec, 'resque-pool', '--daemon --environment production'
         end
       end
     end 
