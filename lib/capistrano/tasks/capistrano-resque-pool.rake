@@ -1,10 +1,16 @@
 namespace :resque do 
   namespace :pool do
+    def rails_env
+      fetch(:resque_rails_env) ||
+      fetch(:rails_env) ||       # capistrano-rails doesn't automatically set this (yet),
+      fetch(:stage)              # so we need to fall back to the stage.
+    end
+
     desc 'Start all the workers and queus'
     task :start do
       on roles(workers) do
         within app_path do
-          execute :bundle, :exec, 'resque-pool', "--daemon --environment #{fetch(:rails_env)}"
+          execute :bundle, :exec, 'resque-pool', "--daemon --environment #{rails_env}"
         end
       end
     end 
