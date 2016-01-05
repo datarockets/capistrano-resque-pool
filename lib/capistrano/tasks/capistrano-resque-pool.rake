@@ -32,7 +32,11 @@ namespace :resque do
     desc 'Reload the config file, reload logfiles, restart all workers'
     task :restart do
       on roles(workers) do
-        execute :kill, "-s HUP `cat #{pid_path}`"
+        if test("[ -f #{pid_path} ]")
+          execute :kill, "-s HUP `cat #{pid_path}`"
+        else
+          invoke 'resque:pool:start'
+        end
       end
     end
 
