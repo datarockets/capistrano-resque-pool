@@ -42,7 +42,7 @@ namespace :resque do
       # Wait for the manager to stop
       pid   = capture(:cat, pid_path)
       tries = 10
-      while tries >= 0 and test("kill -0 #{pid} > /dev/null 2>&1"):
+      while tries >= 0 and test("kill -0 #{pid} > /dev/null 2>&1")
         tries =- 1
         sleep 5
       end
