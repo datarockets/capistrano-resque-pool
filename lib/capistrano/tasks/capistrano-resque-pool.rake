@@ -18,7 +18,13 @@ namespace :resque do
     desc 'Gracefully shut down workers and shutdown the manager after all workers are done'
     task :stop do
       on roles(workers) do
-        execute :kill, "-s QUIT `cat #{pid_path}`"
+        pid = capture(:cat, pid_path)
+        if test "kill -0 #{pid} > /dev/null 2>&1"
+          execute :kill, "-s QUIT #{pid}"
+        else
+          info "Process #{pid} from #{pid_path} is not running, cleaning up stale PID file"
+          execute :rm, pid_path
+        end
       end
     end
 
@@ -27,6 +33,21 @@ namespace :resque do
       on roles(workers) do
         execute :kill, "-s INT `cat #{pid_path}`"
       end
+    end
+
+    desc 'Stop the workers and the manager, re-start them (with a different pid)'
+    task :full_restart do
+      invoke 'resque:pool:stop'
+
+      # Wait for the manager to stop
+      pid   = capture(:cat, pid_path)
+      tries = 10
+      while tries >= 0 and test("kill -0 #{pid} > /dev/null 2>&1"):
+        tries =- 1
+        sleep 5
+      end
+
+      invoke 'resque:pool:start'
     end
 
     desc 'Reload the config file, reload logfiles, restart all workers'
