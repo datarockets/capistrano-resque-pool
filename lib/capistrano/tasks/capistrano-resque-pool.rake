@@ -18,12 +18,14 @@ namespace :resque do
     desc 'Gracefully shut down workers and shutdown the manager after all workers are done'
     task :stop do
       on roles(workers) do
-        pid = capture(:cat, pid_path)
-        if test "kill -0 #{pid} > /dev/null 2>&1"
-          execute :kill, "-s QUIT #{pid}"
-        else
-          info "Process #{pid} from #{pid_path} is not running, cleaning up stale PID file"
-          execute :rm, pid_path
+        if test("[ -f #{pid_path} ]")
+          pid = capture(:cat, pid_path)
+          if test "kill -0 #{pid} > /dev/null 2>&1"
+            execute :kill, "-s QUIT #{pid}"
+          else
+            info "Process #{pid} from #{pid_path} is not running, cleaning up stale PID file"
+            execute :rm, pid_path
+          end
         end
       end
     end
@@ -40,11 +42,15 @@ namespace :resque do
       invoke 'resque:pool:stop'
 
       # Wait for the manager to stop
-      pid   = capture(:cat, pid_path)
-      tries = 10
-      while tries >= 0 and test("kill -0 #{pid} > /dev/null 2>&1")
-        tries =- 1
-        sleep 5
+      on roles(workers) do
+        if test("[ -f #{pid_path} ]")
+          pid   = capture(:cat, pid_path)
+          tries = 10
+          while tries >= 0 and test("kill -0 #{pid} > /dev/null 2>&1")
+            tries =- 1
+            sleep 5
+          end
+        end
       end
 
       invoke 'resque:pool:start'
