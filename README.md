@@ -34,6 +34,10 @@ Reload the config file, reload logfiles, restart all workers.
 
     bundle exec cap production resque:pool:restart
 
+Gracefully shut down workers, Gracefully shut down manager, start a new manager and it's workers
+
+    bundle exec cap production resque:pool:full_restart
+
 
 ## Contributing
 
