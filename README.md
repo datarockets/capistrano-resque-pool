@@ -15,6 +15,20 @@ And then execute:
 Or install it yourself as:
 
     $ gem install capistrano-resque-pool
+    
+## Configuration
+
+You can setup the role or list of roles on which your run resque-pool.
+
+```
+# config/deploy.rb
+set :resque_server_roles, :worker
+
+# config/deploy/production.rb
+server 'background.example.com', roles: [:worker]
+```
+
+By default it assumes that resque is located on servers with `app` role.
 
 ## Usage
 
