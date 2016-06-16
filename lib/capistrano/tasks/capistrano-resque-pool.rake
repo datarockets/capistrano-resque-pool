@@ -1,4 +1,4 @@
-namespace :resque do 
+namespace :resque do
   namespace :pool do
     def rails_env
       fetch(:resque_rails_env) ||
@@ -14,12 +14,12 @@ namespace :resque do
           execute :bundle, :exec, 'resque-pool', "--daemon --environment #{rails_env}"
         end
       end
-    end 
+    end
 
     desc 'Gracefully shut down workers and shutdown the manager after all workers are done'
     task :stop do
       on roles(workers) do
-        if pid_file_exists? 
+        if pid_file_exists?
           pid = capture(:cat, pid_path)
           if test "kill -0 #{pid} > /dev/null 2>&1"
             execute :kill, "-s QUIT #{pid}"
@@ -44,12 +44,14 @@ namespace :resque do
 
       # Wait for the manager to stop
       on roles(workers) do
-        info "Waiting for pool manager to stop.. " 
-        if pid_file_exists? 
+        if pid_file_exists?
           pid   = capture(:cat, pid_path)
           tries = 10
+
           while tries >= 0 and test("kill -0 #{pid} > /dev/null 2>&1")
-            tries =- 1
+            info 'Waiting for pool manager to stop..'
+
+            tries -= 1
             sleep 5
           end
         end
@@ -61,7 +63,7 @@ namespace :resque do
     desc 'Reload the config file, reload logfiles, restart all workers'
     task :restart do
       on roles(workers) do
-        if pid_file_exists? 
+        if pid_file_exists?
           execute :kill, "-s HUP `cat #{pid_path}`"
         else
           invoke 'resque:pool:start'
