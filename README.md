@@ -2,6 +2,7 @@
 
 Capistrano integration for `resque-pool`.
 
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -15,7 +16,12 @@ And then execute:
 Or install it yourself as:
 
     $ gem install capistrano-resque-pool
-    
+
+Finally, require it in your Capfile:
+
+    require 'capistrano-resque-pool'
+
+
 ## Configuration
 
 You can setup the role or list of roles on which your run resque-pool.
@@ -29,6 +35,7 @@ server 'background.example.com', roles: [:worker]
 ```
 
 By default it assumes that resque is located on servers with `app` role.
+
 
 ## Usage
 
