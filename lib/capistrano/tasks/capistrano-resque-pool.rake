@@ -46,7 +46,7 @@ namespace :resque do
       on roles(workers) do
         if pid_file_exists?
           pid   = capture(:cat, pid_path)
-          tries = 10
+          tries = 20
 
           while tries >= 0 and test("kill -0 #{pid} > /dev/null 2>&1")
             info 'Waiting for pool manager to stop..'
