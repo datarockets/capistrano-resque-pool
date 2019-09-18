@@ -16,6 +16,15 @@ namespace :resque do
       end
     end
 
+    desc 'Swap in a new pool, then shut down the old pool'
+    task :hot_swap do
+      on roles(workers) do
+        within app_path do
+          execute :bundle, :exec, 'resque-pool', "--daemon --hot-swap --environment #{rails_env}"
+        end
+      end
+    end
+
     desc 'Gracefully shut down workers and shutdown the manager after all workers are done'
     task :stop do
       on roles(workers) do

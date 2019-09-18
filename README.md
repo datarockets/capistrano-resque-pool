@@ -59,6 +59,10 @@ Gracefully shut down workers, Gracefully shut down manager, start a new manager 
 
     bundle exec cap production resque:pool:full_restart
 
+Leave the old pool running and start a new pool, Shut down other pools after the workers have started for the new pool
+
+    bundle exec cap production resque:pool:hot_swap
+
 
 ## Contributing
 
