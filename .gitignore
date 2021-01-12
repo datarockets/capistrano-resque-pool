@@ -9,6 +9,7 @@ _yardoc
 coverage
 doc/
 lib/bundler/man
+nix
 pkg
 rdoc
 spec/reports
@@ -20,3 +21,4 @@ tmp
 *.o
 *.a
 mkmf.log
+shell.nix

@@ -28,8 +28,8 @@ namespace :resque do
     desc 'Gracefully shut down workers and shutdown the manager after all workers are done'
     task :stop do
       on roles(workers) do
-        if pid_file_exists?
-          pid = capture(:cat, pid_path)
+        pid = read_pid_file
+        if !pid.empty?
           if test "kill -0 #{pid} > /dev/null 2>&1"
             execute :kill, "-s QUIT #{pid}"
           else
@@ -53,8 +53,8 @@ namespace :resque do
 
       # Wait for the manager to stop
       on roles(workers) do
-        if pid_file_exists?
-          pid   = capture(:cat, pid_path)
+        pid = read_pid_file
+        if !pid.empty?
           tries = 20
 
           while tries >= 0 and test("kill -0 #{pid} > /dev/null 2>&1")
@@ -94,6 +94,10 @@ namespace :resque do
 
     def workers
       fetch(:resque_server_roles) || :app
+    end
+
+    def read_pid_file
+      capture("cat #{pid_path} 2> /dev/null || true")
     end
   end
 end
